@@ -89,6 +89,7 @@ var fs = require("fs-extra")
 ,   copyFiles = "analysis.css jquery.min.js sticky-headers.js bootstrap.min.css".split(" ")
 ,   filter = {}
 ,   showdown = require("showdown")
+,   headerTd = ""
 ,   messages = function (data) {
         var res = "";
         for (var i = 0, n = out.ua.length; i < n; i++) {
@@ -415,6 +416,9 @@ var consolidate = function (_consolidated, _out) {
 var testList, testCount;
 var prepareResultCreation = function () {
     out = consolidate(consolidated, out);
+    for (let i = 0; i < out.ua.length; i++) {
+        headerTd += '<td class="OK">OK</td>';
+    }
     wjson(jn(options.output, "consolidated.json"), out);
 
     for (var i = 0, n = out.ua.length; i < n; i++) uaPass[out.ua[i]] = 0;
@@ -477,7 +481,7 @@ var createAllTable = function (tableName) {
     for (var i = 0, n = all.length; i < n; i++) {
         var test = all[i];
         table += "<tr class='test' id='test-file-" + test.testNum + "'><td><a href='http://www.w3c-test.org" + esc(test.name) + "' target='_blank'>" +
-                 esc(test.name) + "</a></td>" + cells(test.status) + "</tr>\n";
+                 esc(test.name) + "</a></td>" + headerTd + "</tr>\n";
         toc += "<li><a href='#test-file-" + i + "'>" + esc(test.name) + "</a></li>\n";
         for (var j = 0, m = test.subtests.length; j < m; j++) {
             var st = test.subtests[j];
@@ -520,7 +524,7 @@ var createLessThanTwoTable = function () {
                      (100 * test.fails.length / totalSubtests).toFixed(2) + "% of total)</small>"
         ;
         table += "<tr class='test' id='test-file-" + test.testNum + "'><td><a href='http://www.w3c-test.org" + esc(test.name) + "' target='_blank'>" +
-                 esc(test.name) + "</a> " + details + "</td>" + cells(test.status) + "</tr>\n";
+                 esc(test.name) + "</a> " + details + "</td>" + headerTd + "</tr>\n";
         toc += "<li><a href='#test-file-" + i + "'>" + esc(test.name) + "</a> " + details + "</li>\n";
         for (var j = 0, m = test.fails.length; j < m; j++) {
             var st = test.fails[j];
@@ -565,7 +569,7 @@ var createCompleteFailTable = function () {
                      (100 * test.boom.length / totalSubtests).toFixed(2) + "% of total)</small>"
         ;
         table += "<tr class='test' id='test-file-" + test.testNum + "'><td><a href='http://www.w3c-test.org" + esc(test.name) + "' target='_blank'>" +
-                 esc(test.name) + "</a> " + details + "</td>" + cells(test.status) + "</tr>\n";
+                 esc(test.name) + "</a> " + details + "</td>" + headerTd + "</tr>\n";
         toc += "<li><a href='#test-file-" + i + "'>" + esc(test.name) + "</a> " + details + "</li>\n";
         for (var j = 0, m = test.boom.length; j < m; j++) {
             var st = test.boom[j];
