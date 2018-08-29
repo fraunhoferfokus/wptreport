@@ -45,6 +45,11 @@ tr.test > td:first-of-type {
     font-weight:    bold;
 }
 
+tr.test :not(:first-child) {
+    background: #ccd1d9;
+    color: #ccd1d9;
+}
+
 tr.test small {
     font-weight:    normal;
 }
